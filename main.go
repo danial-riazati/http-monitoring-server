@@ -1,20 +1,17 @@
 package main
 
 import (
-	"log"
-	"net/http"
+	"os"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/danial-riazati/http-monitoring-server/routes"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	app := fiber.New()
+	f, _ := os.Create("gin.log")
+	app := gin.New()
+	app.Use(gin.LoggerWithWriter(f))
+	routes.UserRoutes(app)
+	app.Run("localhost:1234")
 
-	app.Get("/hello", func(ctx *fiber.Ctx) error {
-		return ctx.Status(http.StatusOK).JSON("hello")
-	})
-
-	if err := app.Listen("127.0.0.1:1307"); err != nil {
-		log.Fatal(err)
-	}
 }

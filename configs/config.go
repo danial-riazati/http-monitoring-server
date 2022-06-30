@@ -18,10 +18,18 @@ type DbConfig struct {
 	ConnectionString string        `koanf:"connection_string"`
 	Timeout          time.Duration `koanf:"connection_timeout"`
 }
+type UserConfig struct {
+	NoOfUrls int32 `koanf:"no_of_urls"`
+}
+type CallerConfig struct {
+	Sleep time.Duration `koanf:"sleep"`
+}
 type Config struct {
-	Listen    string   `koanf:"listen"`
-	DataBase  DbConfig `koanf:"database"`
-	SECRETKEY string   `koanf:"secret_key"`
+	Listen    string       `koanf:"listen"`
+	DataBase  DbConfig     `koanf:"database"`
+	SECRETKEY string       `koanf:"secret_key"`
+	Caller    CallerConfig `koanf:"caller"`
+	User      UserConfig   `koanf:"user"`
 }
 
 func New() Config {

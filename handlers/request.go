@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/danial-riazati/http-monitoring-server/configs"
 	"github.com/danial-riazati/http-monitoring-server/database"
 	"github.com/danial-riazati/http-monitoring-server/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,7 +16,7 @@ import (
 
 var userCollection *mongo.Collection = database.OpenCollection(database.Client, "user")
 
-func RequestHTTP(userId string, url models.URL) {
+func HTTPCaller(userId string, url models.URL) {
 	for true {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		var user models.User
@@ -35,14 +36,15 @@ func RequestHTTP(userId string, url models.URL) {
 		}
 		resp, err := http.Get(url.URL)
 		if err != nil {
-			log.Fatalln(err)
+			log.Println(err)
+			break
 		}
 		fmt.Printf("url: %s  statuscode: %d\n", url.URL, resp.StatusCode)
 		var history models.History
 		history.URL = url
 		history.StatusCode = resp.StatusCode
 		history.Requested_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-		if resp.StatusCode < 200 && resp.StatusCode > 299 {
+		if resp.StatusCode < 200 || resp.StatusCode > 299 {
 			user.Urls[index].Failed++
 			if user.Urls[index].Failed == user.Urls[index].Threshold {
 				user.Alerts = append(user.Alerts, history)
@@ -55,6 +57,6 @@ func RequestHTTP(userId string, url models.URL) {
 		user.History = append(user.History, history)
 		filter := bson.M{"user_id": userId}
 		userCollection.ReplaceOne(ctx, filter, user)
-		time.Sleep(10 * time.Second)
+		time.Sleep(configs.Cfg.Caller.Sleep)
 	}
 }

@@ -10,5 +10,11 @@ func Default() Config {
 			Timeout:          10 * time.Second,
 		},
 		SECRETKEY: "12345678",
+		Caller: CallerConfig{
+			Sleep: 10 * time.Second,
+		},
+		User: UserConfig{
+			NoOfUrls: 20,
+		},
 	}
 }

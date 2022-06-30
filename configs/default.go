@@ -1,12 +1,14 @@
 package configs
 
-import "github.com/danial-riazati/http-monitoring-server/database"
+import "time"
 
 func Default() Config {
 	return Config{
 		Listen: ":1234",
-		DataBase: database.Config{
-			ConnectionString: "mongodb+srv://user:1qaz%21QAZ@cluster0.9yafuwb.mongodb.net/test",
+		DataBase: DbConfig{
+			ConnectionString: "mongodb+srv://user:1qaz%21QAZ@cluster0.9yafuwb.mongodb.net/?retryWrites=true&w=majority",
+			Timeout:          10 * time.Second,
 		},
+		SECRETKEY: "12345678",
 	}
 }

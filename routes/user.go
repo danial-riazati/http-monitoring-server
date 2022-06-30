@@ -6,5 +6,12 @@ import (
 )
 
 func UserRoutes(r *gin.Engine) {
-	r.GET("/login", controllers.Login)
+
+	users := r.Group("/users")
+
+	users.POST("signup", controllers.SignUp)
+	users.POST("login", controllers.Login)
+	// users.Use(middlewares.Auth)
+	// users.GET("history", controllers.GetHistory)
+	// users.GET("alerts", controllers.GetAlerts)
 }

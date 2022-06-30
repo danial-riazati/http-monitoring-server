@@ -3,8 +3,8 @@ package configs
 import (
 	"log"
 	"strings"
+	"time"
 
-	"github.com/danial-riazati/http-monitoring-server/database"
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/providers/structs"
@@ -14,9 +14,14 @@ const (
 	Prefix = "HTTP_MONITORING_"
 )
 
+type DbConfig struct {
+	ConnectionString string        `koanf:"connection_string"`
+	Timeout          time.Duration `koanf:"connection_timeout"`
+}
 type Config struct {
-	Listen   string          `koanf:"listen"`
-	DataBase database.Config `koanf:"database"`
+	Listen    string   `koanf:"listen"`
+	DataBase  DbConfig `koanf:"database"`
+	SECRETKEY string   `koanf:"secret_key"`
 }
 
 func New() Config {
@@ -45,3 +50,5 @@ func New() Config {
 
 	return c
 }
+
+var Cfg = New()

@@ -11,9 +11,8 @@ import (
 func main() {
 	f, _ := os.Create("server.log")
 	app := gin.New()
-	cfg := configs.New()
 	app.Use(gin.LoggerWithWriter(f))
 	routes.UserRoutes(app)
-	app.Run("localhost" + cfg.Listen)
+	app.Run("localhost" + configs.Cfg.Listen)
 
 }

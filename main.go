@@ -3,15 +3,17 @@ package main
 import (
 	"os"
 
+	"github.com/danial-riazati/http-monitoring-server/configs"
 	"github.com/danial-riazati/http-monitoring-server/routes"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	f, _ := os.Create("gin.log")
+	f, _ := os.Create("server.log")
 	app := gin.New()
+	cfg := configs.New()
 	app.Use(gin.LoggerWithWriter(f))
 	routes.UserRoutes(app)
-	app.Run("localhost:1234")
+	app.Run("localhost" + cfg.Listen)
 
 }

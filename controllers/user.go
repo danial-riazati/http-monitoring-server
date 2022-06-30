@@ -8,5 +8,5 @@ import (
 
 func Login(cnx *gin.Context) {
 
-	cnx.IndentedJSON(http.StatusNotFound, "hi")
+	cnx.IndentedJSON(http.StatusOK, "hi")
 }
